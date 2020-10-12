@@ -1,0 +1,2 @@
+C:\Users\ownem\source\repos\SaffronEngine\Saffron\Vendors\v8_lib\Bin\Debug-windows-x86_64\v8_lib\v8_lib.pdb
+C:\Users\ownem\source\repos\SaffronEngine\Saffron\Vendors\v8_lib\Bin-Int\Debug-windows-x86_64\v8_lib\v8_lib.pdb
