@@ -9,7 +9,7 @@
 #ifndef V8PP_PERSISTENT_HPP_INCLUDED
 #define V8PP_PERSISTENT_HPP_INCLUDED
 
-#include <v8.h>
+#include <v8/v8.h>
 
 #include "v8pp/convert.hpp"
 
@@ -32,33 +32,33 @@ struct persistent : public v8::Global<T>
 	}
 
 	template<typename S>
-	persistent(v8::Isolate* isolate, v8::Local<S> const& handle)
+	persistent(v8::Isolate *isolate, v8::Local<S> const &handle)
 		: base_class(isolate, handle)
 	{
 	}
 
 	template<typename S>
-	persistent(v8::Isolate* isolate, v8::PersistentBase<S> const& handle)
+	persistent(v8::Isolate *isolate, v8::PersistentBase<S> const &handle)
 		: base_class(isolate, handle)
 	{
 	}
 
-	persistent(persistent&& src)
+	persistent(persistent &&src)
 		: base_class(src.Pass())
 	{
 	}
 
-	persistent& operator=(persistent&& src)
+	persistent &operator=(persistent &&src)
 	{
-		if (&src != this)
-		{	
+		if ( &src != this )
+		{
 			base_class::operator=(src.Pass());
 		}
 		return *this;
 	}
 
-	persistent(persistent const&) = delete;
-	persistent& operator=(persistent const&) = delete;
+	persistent(persistent const &) = delete;
+	persistent &operator=(persistent const &) = delete;
 };
 
 /// Pointer to C++ object wrapped in V8 with v8::Global handle
@@ -75,20 +75,20 @@ public:
 
 	/// Create a persistent pointer from a  pointer to a wrapped object,
 	/// store persistent handle to it
-	explicit persistent_ptr(v8::Isolate* isolate,  T* value)
+	explicit persistent_ptr(v8::Isolate *isolate, T *value)
 		: value_()
 	{
 		reset(isolate, value);
 	}
 
 	/// Create a persistent pointer from V8 Value, store persistent handle
-	explicit persistent_ptr(v8::Isolate* isolate, v8::Local<v8::Value> handle)
+	explicit persistent_ptr(v8::Isolate *isolate, v8::Local<v8::Value> handle)
 		: value_()
 	{
-		reset(isolate, from_v8<T*>(isolate, handle));
+		reset(isolate, from_v8<T *>(isolate, handle));
 	}
 
-	persistent_ptr(persistent_ptr&& src)
+	persistent_ptr(persistent_ptr &&src)
 		: value_(src.value_)
 		, handle_(std::move(src.handle_))
 	{
@@ -96,9 +96,9 @@ public:
 	}
 
 
-	persistent_ptr& operator=(persistent_ptr&& src)
+	persistent_ptr &operator=(persistent_ptr &&src)
 	{
-		if (&src != this)
+		if ( &src != this )
 		{
 			value_ = src.value_;
 			src.value_ = nullptr;
@@ -111,14 +111,14 @@ public:
 	~persistent_ptr() { reset(); }
 
 	/// Reset with a new pointer to wrapped C++ object, replace persistent handle
-	void reset(v8::Isolate* isolate, T* value)
+	void reset(v8::Isolate *isolate, T *value)
 	{
-		if (value != value_)
+		if ( value != value_ )
 		{
 			assert((value_ == nullptr) == handle_.IsEmpty());
 			handle_.Reset();
 			value_ = value;
-			if (value_)
+			if ( value_ )
 			{
 				handle_.Reset(isolate, to_v8(isolate, value_));
 			}
@@ -128,40 +128,40 @@ public:
 	void reset() { reset(nullptr, nullptr); }
 
 	/// Get pointer to the wrapped C++ object
-	T* get() { return value_; }
-	T const* get() const { return value_; }
+	T *get() { return value_; }
+	T const *get() const { return value_; }
 
-	typedef T* (persistent_ptr<T>::*unspecfied_bool_type);
+	typedef T *(persistent_ptr<T>:: *unspecfied_bool_type);
 
 	/// Safe bool cast
 	operator unspecfied_bool_type() const
 	{
-		return value_? &persistent_ptr<T>::value_ : nullptr;
+		return value_ ? &persistent_ptr<T>::value_ : nullptr;
 	}
 
 	/// Dereference pointer, valid if get() != nullptr
-	T& operator*() { assert(value_); return *value_; }
-	T const& operator*() const { assert(value_); return *value_; }
+	T &operator*() { assert(value_); return *value_; }
+	T const &operator*() const { assert(value_); return *value_; }
 
-	T* operator->() { assert(value_); return value_; }
-	T const* operator->() const { assert(value_); return value_; }
+	T *operator->() { assert(value_); return value_; }
+	T const *operator->() const { assert(value_); return value_; }
 
-	bool operator==(persistent_ptr const& rhs) const { return value_ == rhs.value_; }
-	bool operator!=(persistent_ptr const& rhs) const { return value_ != rhs.value_; }
+	bool operator==(persistent_ptr const &rhs) const { return value_ == rhs.value_; }
+	bool operator!=(persistent_ptr const &rhs) const { return value_ != rhs.value_; }
 
-	void swap(persistent_ptr& rhs)
+	void swap(persistent_ptr &rhs)
 	{
 		std::swap(value_, rhs.value_);
 		std::swap(handle_, rhs.handle_);
 	}
 
-	friend void swap(persistent_ptr& lhs, persistent_ptr& rhs)
+	friend void swap(persistent_ptr &lhs, persistent_ptr &rhs)
 	{
 		lhs.swap(rhs);
 	}
 
 private:
-	T* value_;
+	T *value_;
 	v8::Global<v8::Value> handle_;
 };
 

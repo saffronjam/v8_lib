@@ -9,7 +9,7 @@
 #ifndef V8PP_CALL_V8_HPP_INCLUDED
 #define V8PP_CALL_V8_HPP_INCLUDED
 
-#include <v8.h>
+#include <v8/v8.h>
 
 #include "v8pp/convert.hpp"
 
@@ -21,8 +21,8 @@ namespace v8pp {
 /// @param recv V8 object used as `this` in the function
 /// @param args...  C++ arguments to convert to JS arguments using to_v8
 template<typename ...Args>
-v8::Local<v8::Value> call_v8(v8::Isolate* isolate, v8::Local<v8::Function> func,
-	v8::Local<v8::Value> recv, Args&&... args)
+v8::Local<v8::Value> call_v8(v8::Isolate *isolate, v8::Local<v8::Function> func,
+							 v8::Local<v8::Value> recv, Args&&... args)
 {
 	v8::EscapableHandleScope scope(isolate);
 

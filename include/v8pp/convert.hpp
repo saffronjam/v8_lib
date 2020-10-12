@@ -9,7 +9,7 @@
 #ifndef V8PP_CONVERT_HPP_INCLUDED
 #define V8PP_CONVERT_HPP_INCLUDED
 
-#include <v8.h>
+#include <v8/v8.h>
 
 #include <climits>
 #include <string>
