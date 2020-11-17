@@ -1,7 +1,0 @@
-﻿  class.cpp
-  context.cpp
-  convert.cpp
-  json.cpp
-  throw_ex.cpp
-  version.cpp
-  v8_lib.vcxproj -> C:\Users\ownem\source\repos\SaffronEngine\Saffron\Vendors\v8_lib\Bin\Debug-windows-x86_64\v8_lib\v8_lib.lib
